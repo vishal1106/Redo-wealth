@@ -2,15 +2,15 @@ const express=require("express")
 const mongoose = require("mongoose");
 const cors=require("cors")
 require('dotenv').config()
-// mongoose.connect(process.env.MONGO_URL)
-// .then(()=>{
-//     console.log("Database connection successfull");
+mongoose.connect(process.env.MONGO_URL)
+.then(()=>{
+    console.log("Database connection successfull");
     
-// })
-// .catch(()=>{
-//     console.log("Database connection failed")
+})
+.catch(()=>{
+    console.log("Database connection failed")
    
-// });
+});
 
 const userSchema =new mongoose.Schema({
     
@@ -29,8 +29,9 @@ app.use(cors())
 // get add from server
 app.get("/",async(req,res)=>{
     try {
-        const vishal= await usermodel.find()
-        res.status(200).json(vishal)
+        const data= await usermodel.find()
+        res.status(200).json(data)
+        console.log(data)
     } catch (error) {
       res.status(400).json({massage:error.massage})  
     }
@@ -72,6 +73,7 @@ app.put("/edit/:userId",async (request, response) => {
 
 app.delete("/delete/:userId",async (request, response) => {
   
+
    try{
         await usermodel.findOneAndDelete({_id:request.params.userId});
         response.status(200).json("User deleted Successfully");
@@ -83,13 +85,5 @@ app.delete("/delete/:userId",async (request, response) => {
 
 app.listen(8000,()=>{
     console.log("server connect is successfull")
-    mongoose.connect(process.env.MONGO_URL)
-.then(()=>{
-    console.log("Database connection successfull");
-    
-})
-.catch(()=>{
-    console.log("Database connection failed")
    
-});
 })
